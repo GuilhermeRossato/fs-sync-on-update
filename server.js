@@ -47,6 +47,7 @@ function makeSureFolderExists(folderPath) {
 		console.log("Source client: " + JSON.stringify(client.remoteAddress));
 
 		client.on("data", (rawData) => {
+			rawData = rawData.toString("utf8");
 			if (rawData.substring(0, password.length) !== password) {
 				client.end("Authentication error");
 				return;
