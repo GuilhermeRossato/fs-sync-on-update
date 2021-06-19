@@ -134,7 +134,7 @@ async function findChangesVirtualFileSystem(fullPath, virtualFs, onChange, allCh
 
 		await Promise.all(
 			data.filter(
-				change => change.content && change.size !== change.content.length
+				change => change.filePath && change.content && change.size !== change.content.length
 			).map(
 				async change => change.content = await fs.readFile(change.filePath, "utf8")
 			)
