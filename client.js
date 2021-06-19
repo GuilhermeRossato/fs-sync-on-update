@@ -24,7 +24,13 @@ function askQuestion(query) {
 async function populateVirtualFileSystem(fullPath, virtualFs = {}) {
 	const nodes = await fs.readdir(fullPath, "utf8");
 	for (let node of nodes) {
-		const stats = await fs.stat(fullPath + "/" + node);
+		let stats;
+		try {
+			stats = await fs.stat(fullPath + "/" + node);
+		} catch (err) {
+			console.log("Error reading file at " + JSON.stringify(fullPath + "/" + node) + ": " + err.stack);
+			continue;
+		}
 		if (stats.isDirectory()) {
 			virtualFs[node] = {};
 			await populateVirtualFileSystem(fullPath + "/" + node, virtualFs[node]);
@@ -49,7 +55,7 @@ async function recursivelySendDeletion(fullPath, virtualFs, onChange) {
 }
 
 async function findChangesVirtualFileSystem(fullPath, virtualFs, onChange, allChange = false) {
-	const nodes = await fs.readdir(fullPath, "utf8");
+	let nodes = await fs.readdir(fullPath, "utf8");
 	for (let node in virtualFs) {
 		if (!nodes.includes(node)) {
 			if (typeof virtualFs[node] === "object" && !(virtualFs[node] instanceof Array)) {
@@ -60,8 +66,15 @@ async function findChangesVirtualFileSystem(fullPath, virtualFs, onChange, allCh
 			delete virtualFs[node];
 		}
 	}
+	nodes = await fs.readdir(fullPath, "utf8");
 	for (let node of nodes) {
-		const stats = await fs.stat(fullPath + "/" + node);
+		let stats;
+		try {
+			stats = await fs.stat(fullPath + "/" + node);
+		} catch (err) {
+			console.log("Error reading file at " + JSON.stringify(fullPath + "/" + node) + ": " + err.stack);
+			continue;
+		}
 		if (stats.isDirectory()) {
 			if (!virtualFs[node] || (virtualFs[node] instanceof Array)) {
 				allChange = true;
