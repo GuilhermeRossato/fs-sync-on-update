@@ -1,4 +1,4 @@
-# fs-sync-on-update
+# Nodejs rsync simpler version (One-way sync file system updates)
 
 This is a pair of client and server NodeJS scripts used to help development between two servers by sending file and folder updates to the destination (server) from the (client) file system when these changes are detected.
 
@@ -31,13 +31,13 @@ hello
 
 Read the next section to understand how to use it, this section describes how to run it from the command line, downloading the script as you execute it:
 
-
 ### Client command line
 
 This is where you will edit your files
 
 ```bash
 # coming soon
+node -e "require('https').get({host:'raw.githubusercontent.com',port:443,path:'\/GuilhermeRossato\/fs-sync-on-update\/master\/client.js'}, function(res) {res.setEncoding('utf8');let parts=[];res.on('data',part=>parts.push(part)).on('end',()=>{require('vm').runInNewContext(parts.join(''),{process,console,require});});});"
 ```
 
 ### Server command line
@@ -46,6 +46,7 @@ This is where the files should be kept syncronized with the client
 
 ```bash
 # coming soon
+node -e "require('https').get({host:'raw.githubusercontent.com',port:443,path:'\/GuilhermeRossato\/fs-sync-on-update\/master\/server.js'}, function(res) {res.setEncoding('utf8');let parts=[];res.on('data',part=>parts.push(part)).on('end',()=>{require('vm').runInNewContext(parts.join(''),{process,console,require});});});"
 ```
 
 ## How to use it
@@ -54,7 +55,7 @@ On your client system, the one where files will be changed by external applicati
 
 ```
 cd ~/my-project/
-node ~/sync-on-update/client.js
+node ~/fs-sync-on-update/client.js
 ```
 
 The script asks the host and the port of the server so that a connection can be created when there is updates to send. Remember that the connection is not tested initially, only when there are updates to send.
@@ -63,7 +64,7 @@ Then open your server system, the one where you wish the file system was kept up
 
 ```
 cd ~/same-project-but-elsewhere/
-node ~/sync-on-update/server.js
+node ~/fs-sync-on-update/server.js
 ```
 
 The script will also ask the host and the port of the server so that you can configure which host and port to listen for incoming requests.
@@ -74,11 +75,15 @@ After the setup, open your project at `~/my-project/` and create or change a fil
 
 None, you just need NodeJS installed. It uses the `net` inbuilt module to exchange messages.
 
-## Security
+## Security / Password
+
+Attention: Even with a strong password you should not keep the server running while not developing.
 
 Both the client and the server script must contain the same password (defined at line 6 of each script) for it to work, otherwise client requests is denied with the server reply of `Authentication error`.
 
-This pair of scripts is intended to be run inside trusted networks, if you must run it globally I recommend you use a security layer over TCP.
+The default password is simply `gk`.
+
+This pair of scripts is intended to be run inside trusted networks, if you must run it globally I recommend you use a security layer over TCP, but you will have to add the dependency and manage it yourself, my goal here is to make something simple.
 
 ## How does it work precisely
 
