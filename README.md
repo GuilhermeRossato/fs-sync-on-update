@@ -36,7 +36,6 @@ Read the next section to understand how to use it, this section describes how to
 This is where you will edit your files
 
 ```bash
-# coming soon
 node -e "require('https').get({host:'raw.githubusercontent.com',port:443,path:'\/GuilhermeRossato\/fs-sync-on-update\/master\/client.js'}, function(res) {res.setEncoding('utf8');let parts=[];res.on('data',part=>parts.push(part)).on('end',()=>{require('vm').runInNewContext(parts.join(''),{process,console,require});});});"
 ```
 
@@ -45,7 +44,6 @@ node -e "require('https').get({host:'raw.githubusercontent.com',port:443,path:'\
 This is where the files should be kept syncronized with the client
 
 ```bash
-# coming soon
 node -e "require('https').get({host:'raw.githubusercontent.com',port:443,path:'\/GuilhermeRossato\/fs-sync-on-update\/master\/server.js'}, function(res) {res.setEncoding('utf8');let parts=[];res.on('data',part=>parts.push(part)).on('end',()=>{require('vm').runInNewContext(parts.join(''),{process,console,require});});});"
 ```
 
