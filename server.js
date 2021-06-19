@@ -49,7 +49,10 @@ function makeSureFolderExists(folderPath) {
 		client.on("data", (rawData) => {
 			rawData = rawData.toString("utf8");
 			if (rawData.substring(0, password.length) !== password) {
-				client.end("Authentication error");
+				try {
+					client.end("Authentication error");
+				} catch (err) {
+				}
 				return;
 			}
 			/**
@@ -59,7 +62,11 @@ function makeSureFolderExists(folderPath) {
 			try {
 				data = JSON.parse(rawData.substring(password.length).toString("utf8"));
 			} catch (err) {
-				client.end("Failed at interpreting message");
+				try {
+					client.end("Failed at interpreting message");
+				} catch (err) {
+				}
+				console.log("Failed at interpretation: " + err.stack);
 				return;
 			}
 			for (let change of data) {
@@ -133,6 +140,7 @@ function makeSureFolderExists(folderPath) {
 				}
 			}
 			client.end("ok");
+			return;
 		});
 	});
 
