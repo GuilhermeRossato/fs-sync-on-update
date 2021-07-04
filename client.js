@@ -8,6 +8,7 @@ const password = "gk";
 const net = require("net");
 const fs = require("fs").promises;
 const readline = require('readline');
+const endIndicator = "(#" + "@~|)";
 
 function askQuestion(query) {
     const rl = readline.createInterface({
@@ -147,7 +148,7 @@ async function findChangesVirtualFileSystem(fullPath, virtualFs, onChange, allCh
 					port
 				});
 				socket.on("connect", function() {
-					socket.write(password+JSON.stringify(data));
+					socket.write(password+JSON.stringify(data)+endIndicator);
 					console.log("Sent " + data.length + " updates to server");
 				});
 				socket.on("data", function(data) {
