@@ -8,7 +8,8 @@ const password = "gk";
 const net = require("net");
 const readline = require('readline');
 const fs = require('fs');
-const path = require('path');
+const path = require('path
+const endIndicator = "(#" + "@~|)";
 
 function askQuestion(query) {
     const rl = readline.createInterface({
@@ -45,13 +46,22 @@ function makeSureFolderExists(folderPath) {
 
 	const server = net.createServer(function onClientConnect(client) {
 		console.log("Source client: " + JSON.stringify(client.remoteAddress));
-
+		let allData = "";
+		
 		client.on("data", (rawData) => {
 			rawData = rawData.toString("utf8");
+			allData += rawData;
+			if (!allData.includes(endIndicator)) {
+				// must wait for the rest of the data
+				return;
+			}
+			rawData = allData.split(endIndicator)[0];
+			allData = allData.substring(rawData.length + endIndicator.length);
 			if (rawData.substring(0, password.length) !== password) {
 				try {
 					client.end("Authentication error");
 				} catch (err) {
+					// do nothing
 				}
 				return;
 			}
