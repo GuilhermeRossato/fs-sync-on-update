@@ -8,7 +8,7 @@ const password = "gk";
 const net = require("net");
 const readline = require('readline');
 const fs = require('fs');
-const path = require('path
+const path = require('path');
 const endIndicator = "(#" + "@~|)";
 
 function askQuestion(query) {
