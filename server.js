@@ -34,12 +34,12 @@ function makeSureFolderExists(folderPath) {
 }
 
 (async function init() {
-	const host = (await askQuestion("Server host [localhost]: ")).trim() || "localhost";
+	const host = (await askQuestion("What is the server host [localhost]: ")).trim() || global.sync_hostname || process.argv[2] || "localhost";
 	if (host !== "localhost") {
 		console.log("Host: " + host);
 	}
 
-	const port = (await askQuestion("Server port [6937]: ")).trim() || "6937";
+	const port = (await askQuestion("What is the server port [6937]: ")).trim() || global.sync_port || process.argv[3] || "6937";
 	if (port !== "6937") {
 		console.log("Port: " + port);
 	}
