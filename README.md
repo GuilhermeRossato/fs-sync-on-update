@@ -8,11 +8,29 @@ It achieves the same behaviour as [rsync](https://rsync.samba.org/) in watch mod
 
 The client watches for file changes on its local file system and when it detects something it opens a TCP Socket to the server and sends the list of file system events, including file contents.
 
-## Why use this
+## How to use it directly
 
-Suppose you have two virtual machines, one of them is your web server and the other is your development enviroment, with all your editing programs, debuggers, and fancy pants.
+Read the next section to understand how to use it, this section describes how to run it from the command line, downloading the script as you execute it:
 
-When you save your source code the pair of client and server on this repository will send that file update to your server so that both contain the same files with the same contents in the same folders.
+### Client command line
+
+This is where you will edit your files
+
+```bash
+node -e "global.sync_hostname = '';global.sync_port='';require('https').get({host:'raw.githubusercontent.com',port:443,path:'\/GuilhermeRossato\/fs-sync-on-update\/master\/client.js'}, function(res) {res.setEncoding('utf8');let parts=[];res.on('data',part=>parts.push(part)).on('end',()=>{require('vm').runInNewContext(parts.join(''),{global,process,console,require,setTimeout});});});"
+```
+
+### Server command line
+
+This is where the files should be kept syncronized with the client
+
+```bash
+node -e "global.sync_hostname = '';global.sync_port='';require('https').get({host:'raw.githubusercontent.com',port:443,path:'\/GuilhermeRossato\/fs-sync-on-update\/master\/server.js'}, function(res) {res.setEncoding('utf8');let parts=[];res.on('data',part=>parts.push(part)).on('end',()=>{require('vm').runInNewContext(parts.join(''),{global,process,console,require,setTimeout});});});"
+```
+
+## Why use it
+
+Suppose you have a web server and another computer as your development enviroment, when you save your source code the pair of client and server on this repository will syncronize that file so that your server and client contains the same file structure and content, regardless of your code editor.
 
 ```bash
 # client
@@ -25,26 +43,6 @@ echo hello > ~/my-project/my-source-file.c
 cat ~/my-project-elsewhere/my-source-file.c
 hello
 # file has appeared because of the `server.js` script, which received the file and its content
-```
-
-## How to use it without downloading first
-
-Read the next section to understand how to use it, this section describes how to run it from the command line, downloading the script as you execute it:
-
-### Client command line
-
-This is where you will edit your files
-
-```bash
-node -e "require('https').get({host:'raw.githubusercontent.com',port:443,path:'\/GuilhermeRossato\/fs-sync-on-update\/master\/client.js'}, function(res) {res.setEncoding('utf8');let parts=[];res.on('data',part=>parts.push(part)).on('end',()=>{require('vm').runInNewContext(parts.join(''),{process,console,require,setTimeout});});});"
-```
-
-### Server command line
-
-This is where the files should be kept syncronized with the client
-
-```bash
-node -e "require('https').get({host:'raw.githubusercontent.com',port:443,path:'\/GuilhermeRossato\/fs-sync-on-update\/master\/server.js'}, function(res) {res.setEncoding('utf8');let parts=[];res.on('data',part=>parts.push(part)).on('end',()=>{require('vm').runInNewContext(parts.join(''),{process,console,require,setTimeout});});});"
 ```
 
 ## How to use it
