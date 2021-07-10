@@ -99,12 +99,12 @@ async function findChangesVirtualFileSystem(fullPath, virtualFs, onChange, allCh
 }
 
 (async function init() {
-	const host = (await askQuestion("What is the server host [localhost]: ")).trim() || global.sync_hostname || process.argv[2] || "localhost";
+	const host = global.sync_hostname || process.argv[2] || (await askQuestion("What is the server host [localhost]: ")).trim() || "localhost";
 	if (host !== "localhost") {
 		console.log("Host: " + host);
 	}
 
-	const port = (await askQuestion("What is the server port [6937]: ")).trim() || global.sync_port || process.argv[3] || "6937";
+	const port = global.sync_port || process.argv[3] || (await askQuestion("What is the server port [6937]: ")).trim() || "6937";
 	if (port !== "6937") {
 		console.log("Port: " + port);
 	}
